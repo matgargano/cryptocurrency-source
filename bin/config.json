@@ -1,0 +1,17 @@
+{
+  "string_identifier_replace_token": "{string_identifier}",
+  "files": [
+    {
+      "file_name": "\/..\/readme.txt",
+      "string_identifier": "Stable tag:",
+      "regex": "\/{string_identifier}\\s+([\\d.]+)\/i",
+      "source": true
+    },
+    {
+      "file_name": "\/..\/cryptocurrency.php",
+      "string_identifier": "Version:",
+      "regex": "\/{string_identifier}\\s+([\\d.]+)\/i"
+
+    }
+  ]
+}

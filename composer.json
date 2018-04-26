@@ -1,0 +1,16 @@
+{
+    "name": "statenweb/cryptocurrency",
+    "description": "Cryptocurrency Display",
+    "type": "wordpress-plugin",
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "Mat Gargano",
+            "email": "mat@statenweb.com"
+        }
+    ],
+    "require-dev": {
+        "htmlburger/carbon-fields": "^2.1",
+        "htmlburger/carbon-field-number": "^2.0"
+    }
+}
