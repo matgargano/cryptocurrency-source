@@ -1,4 +1,6 @@
 {
+  "destination_repo" : "git@github.com:matgargano/cryptocurrency-dist.git",
+  "exclude": [ "bin", "composer.json", "composer.lock"],
   "string_identifier_replace_token": "{string_identifier}",
   "files": [
     {

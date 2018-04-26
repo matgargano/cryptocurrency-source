@@ -1,11 +1,9 @@
 <?php
 
 
+$json_file = file_get_contents( __DIR__ . '/config.json' );
 
-
-$json_file = file_get_contents(__DIR__ . '/config.json');
-
-$config = json_decode($json_file);
+$config = json_decode( $json_file );
 
 
 if ( ! $config ) {
@@ -13,10 +11,11 @@ if ( ! $config ) {
     die();
 }
 
+$new_version = null;
 
+$branch = isset( $config->branch ) ? $config->branch : 'master';
 
-
-$files                           = $config->files;
+$files = $config->files;
 
 
 $place     = null;
@@ -66,20 +65,51 @@ foreach ( $files as $file ) {
         $version_array[ $place ] = (int) $version_array[ $place ] + 1;
     }
 
-    $new_string_identifier = sprintf( '%s.%s.%s', (int) $version_array[0], (int) $version_array[1],
+    $new_version = $new_version ? $new_version : sprintf( '%s.%s.%s', (int) $version_array[0], (int) $version_array[1],
         (int) $version_array[2] );
 
 
     $new_file_contents = preg_replace( sprintf( $regex, $string_identifier ),
-        sprintf( "%s $new_string_identifier", $string_identifier ), $file_content );
+        sprintf( "%s $new_version", $string_identifier ), $file_content );
     file_put_contents( $file_name, $new_file_contents );
 
     echo sprintf( "Success for %s --- %s is now %s" . PHP_EOL . PHP_EOL, $file_name, $old_version,
-        $new_string_identifier );
+        $new_version );
 
 
 }
 
+echo '---- done with file updating ---';
+
+$exclude = $config->exclude;
+
+$exclude[] = '.git';
+$exclude[] = '.svn';
+$exclude[] = '.build';
+$exclude[] = '.idea ';
+
+$exclude = array_unique( $exclude );
+
+
+$exclude_parameters = array_map( function ( $exclude ) {
+
+    return ' --exclude=' . $exclude . ' ';
+
+}, $exclude );
+
+$exclude_string = implode( ' ', $exclude_parameters );
+
+echo $exclude_string;
+
+shell_exec( 'rm -rf .build' );
+shell_exec( 'git clone ' . $config->destination_repo . ' .build' );
+
+
+shell_exec( sprintf( 'rsync -aP %s ./ ./.build', $exclude_string ) );
+shell_exec( 'cd .build' );
+shell_exec( 'git add .' );
+shell_exec( sprintf( 'git commit -am "updating for %s"', $new_version ) );
+shell_exec( sprintf( 'git push origin %s', $branch ) );
 
 
 
