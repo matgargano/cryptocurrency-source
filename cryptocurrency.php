@@ -4,7 +4,7 @@ Plugin Name: Cryptocurrency Portfolio Tracker
 Description: Enter your cryptocurrency purchases and track their pricing in real time
 Plugin URI: https://statenweb/cryptocurrency
 Author: Mat Gargano
-Version: 0.0.16
+Version: 0.0.15
 Author URI: https://statenweb.com/
 Text Domain:       cryptocurrency
 Domain Path:       /languages
@@ -13,6 +13,7 @@ Domain Path:       /languages
 use Cryptocurrency\Actions;
 use Cryptocurrency\Settings\Global_Settings;
 use Cryptocurrency\Shortcodes\Table;
+use Cryptocurrency\Version_Check;
 
 function cry_fs() {
     global $cry_fs;
@@ -46,41 +47,63 @@ cry_fs();
 // Signal that SDK was initiated.
 do_action( 'cry_fs_loaded' );
 
-require __DIR__ . '/vendor/autoload.php';
 
-$namespace = 'Cryptocurrency';
-spl_autoload_register( function ( $class ) use ( $namespace ) {
-	$base = explode( '\\', $class );
-	if ( $namespace === $base[0] ) {
-		$file = __DIR__ . DIRECTORY_SEPARATOR . strtolower( str_replace( [ '\\' ], [ DIRECTORY_SEPARATOR, ],
-					$class ) . '.php' );
-		if ( file_exists( $file ) ) {
-			require $file;
-		} else {
-			wp_die( sprintf( 'File %s not found', esc_html( $file ) ) );
-		}
-	}
+function cryptocurrency_version_notice() {
 
-} );
 
-add_action( 'plugins_loaded', 'cryptocurrency_load_plugin_textdomain' );
 
-$global_settings = new Global_Settings();
-$global_settings->init();
+    $class   = 'notice notice-error';
+    $message = __( sprintf( 'Cryptocurrency Portfolio Tracker plugin requires PHP version 5.5 or newer, you currently are using %s',
+        phpversion() ), 'cryptocurrency' );
 
-$table_shortcode = new Table();
-$table_shortcode->init();
-
-$actions = new Actions();
-$actions->init();
-
-function cryptocurrency_table( $output = true ) {
-
-	return \Cryptocurrency\Output\Table::generate( $output );
+    printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 
 }
 
-function cryptocurrency_load_plugin_textdomain() {
-	load_plugin_textdomain( 'cryptocurrency', false, basename( dirname( __FILE__ ) ) . '/languages/' );
-}
 
+if ( (int)version_compare( phpversion(), '5.5' ) <= 0 ){
+
+    add_action( 'admin_notices', 'cryptocurrency_version_notice' );
+
+
+} else {
+
+    require __DIR__ . '/vendor/autoload.php';
+
+    $namespace = 'Cryptocurrency';
+    spl_autoload_register( function ( $class ) use ( $namespace ) {
+        $base = explode( '\\', $class );
+        if ( $namespace === $base[0] ) {
+            $file = __DIR__ . DIRECTORY_SEPARATOR . strtolower( str_replace( [ '\\' ], [ DIRECTORY_SEPARATOR, ],
+                        $class ) . '.php' );
+            if ( file_exists( $file ) ) {
+                require $file;
+            } else {
+                wp_die( sprintf( 'File %s not found', esc_html( $file ) ) );
+            }
+        }
+
+    } );
+
+    add_action( 'plugins_loaded', 'cryptocurrency_load_plugin_textdomain' );
+
+    $global_settings = new Global_Settings();
+    $global_settings->init();
+
+    $table_shortcode = new Table();
+    $table_shortcode->init();
+
+    $actions = new Actions();
+    $actions->init();
+
+    function cryptocurrency_table( $output = true ) {
+
+        return \Cryptocurrency\Output\Table::generate( $output );
+
+    }
+
+    function cryptocurrency_load_plugin_textdomain() {
+        load_plugin_textdomain( 'cryptocurrency', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+    }
+
+}

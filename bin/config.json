@@ -1,5 +1,6 @@
 {
-  "destination_repo" : "git@github.com:matgargano/cryptocurrency-dist.git",
+  "dist_git_repo" : "git@github.com:matgargano/cryptocurrency-dist.git",
+  "dist_svn_repo" : "https://plugins.svn.wordpress.org/cryptocurrency/",
   "exclude": [ "bin", "composer.json", "composer.lock"],
   "string_identifier_replace_token": "{string_identifier}",
   "files": [
