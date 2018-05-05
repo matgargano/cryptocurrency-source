@@ -134,7 +134,7 @@ shell_exec('rm -rf .buildsvn/trunk');
 shell_exec( sprintf( 'rsync -aP %s ./ ./.buildsvn/trunk', $exclude_string ) );
 shell_exec( sprintf( 'rsync -aP %s ./ ./.buildsvn/tags/%s', $exclude_string, $new_version ) );
 shell_exec('cd .buildsvn && svn add trunk/*');
-shell_exec('cd .buildsvn && svn add tags/*');
+shell_exec( sprintf( 'cd .buildsvn && svn add tags/%s', $new_version ) );
 
 shell_exec(sprintf('cd .buildsvn && svn ci -m "updated to %s"', $new_version) );
 shell_exec('rm -rf .buildsvn --');
