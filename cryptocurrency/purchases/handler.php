@@ -5,6 +5,7 @@ namespace Cryptocurrency\Purchases;
 use Cryptocurrency\Currencies;
 use Cryptocurrency\Processor;
 use Cryptocurrency\Request\Mapper;
+use Cryptocurrency\Settings\Global_Settings;
 
 class Handler {
 
@@ -40,12 +41,15 @@ class Handler {
 
 		$this->data->time = $price_all_data->time;
 
+        $fiat_data = Global_Settings::get_fiat();
+        $price_field = $fiat_data['price_field'];
+
 
 		foreach ( $this->purchases as $purchase ) {
 
 
 			$nice_name     = $mapper_data[ $purchase['coin_type'] ]['nice_name'];
-			$current_price = (float) $price_all_data->data[ $purchase['coin_type'] ]->price_usd;
+			$current_price = (float) $price_all_data->data[ $purchase['coin_type'] ]->{$price_field};
 
 			$previous_quantity = 0;
 			$previous_spend    = 0;

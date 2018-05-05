@@ -3,6 +3,7 @@
 namespace Cryptocurrency\Output;
 
 use Cryptocurrency\Purchases\Handler;
+use Cryptocurrency\Settings\Global_Settings;
 
 class Table {
 
@@ -20,6 +21,10 @@ class Table {
 	}
 
 	protected static function build_table() {
+        $fiat_data = Global_Settings::get_fiat();
+        $currency_symbol_before = array_key_exists('symbol_before', $fiat_data) ? $fiat_data['symbol_before'] : '';
+        $currency_symbol_after = array_key_exists('symbol_after', $fiat_data) ? $fiat_data['symbol_after'] : '';
+
 		$currencies       = carbon_get_theme_option( 'crypto_items' );
 		$purchase_handler = new Handler( $currencies );
 		$pricing          = $purchase_handler->get();
@@ -38,8 +43,8 @@ class Table {
 
 		$last_updated = self::nice_time( $pricing->time );
 
-		$currency_symbol_before = _x( '$', 'currency symbol before', 'cryptocurrency' );
-		$currency_symbol_after  = _x( '', 'currency symbol after', 'cryptocurrency' );
+		$currency_symbol_before = _x( $currency_symbol_before, 'currency symbol before', 'cryptocurrency' );
+		$currency_symbol_after  = _x( $currency_symbol_after, 'currency symbol after', 'cryptocurrency' );
 
 		?>
 

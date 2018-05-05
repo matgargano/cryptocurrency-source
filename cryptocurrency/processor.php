@@ -7,6 +7,7 @@ use Cryptocurrency\Cache\Transient;
 use Cryptocurrency\Datamap\Coinmarketcap;
 use Cryptocurrency\Datamap\Mapper;
 use Cryptocurrency\Request\API;
+use Cryptocurrency\Settings\Global_Settings;
 
 class Processor {
 
@@ -51,7 +52,7 @@ class Processor {
 		 * @var $request API;
 		 */
 		if ( $this->cache ) {
-			$cache_key = md5( serialize( (array) $this->api ) );
+			$cache_key = md5( serialize( array( $this->api, Global_Settings::get_fiat() ) ) );
 			/**
 			 * @var $cache Cache;
 			 */

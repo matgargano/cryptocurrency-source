@@ -24,6 +24,7 @@ Please note that this plugin makes use of a 3rd party service to retrieve crypto
 
 - Download, install and activate the plugin.
 - Go to `Settings` > `Cryptocurrency`
+- Set your fiat currency (USD by default and you can optionally set it to use the euro)
 - Populate your coin purchases and your cost bases. You can enter multiple entries for the same currency (i.e. you have bought the same currency multiple times at different cost bases).
 - ???
 - Profit!... or look and see how to output the table on the frontend.
@@ -55,6 +56,18 @@ Showing the last updated:
 
 `add_filter( 'cryptocurrency/show_last_updated', '__return_true' );`
 
+Changing how currency is displayed:
+
+If you are using Euro as your fiat currency it defaults to outputting the € symbol after the amount, you can easily switch it to show the € symbol before by doing the following
+
+```
+add_filter('cryptocurrency/currency_symbol_before', function(){
+	return '€';
+} );
+
+add_filter('cryptocurrency/currency_symbol_after', '__return_null' );
+```
+
 #### API
 
 This plugin uses the public API made available by coinmarketcap.com. It is built to cache responses for 60 seconds so as to not flood the API. The plugin injects the last updated date/time as part of the response object which can be exposed via a filter (see Filters above). Please make sure to follow their API rules. See https://coinmarketcap.com/api/ for more information.
@@ -63,6 +76,8 @@ This plugin uses the public API made available by coinmarketcap.com. It is built
 #### Release Notes
 
 
+- 0.0.17
+update to support euro as the fiat currency
 
 - 0.0.16
 add in a version checker, the plugin requires PHP 5.5 or greater
