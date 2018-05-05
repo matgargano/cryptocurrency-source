@@ -4,7 +4,7 @@ Plugin Name: Cryptocurrency Portfolio Tracker
 Description: Enter your cryptocurrency purchases and track their pricing in real time
 Plugin URI: https://statenweb/cryptocurrency
 Author: Mat Gargano
-Version: 0.0.15
+Version: 0.0.16
 Author URI: https://statenweb.com/
 Text Domain:       cryptocurrency
 Domain Path:       /languages

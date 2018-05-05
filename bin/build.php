@@ -137,7 +137,7 @@ shell_exec('cd .buildsvn && svn add trunk/*');
 shell_exec('cd .buildsvn && svn add tags/*');
 
 shell_exec(sprintf('cd .buildsvn && svn ci -m "updated to %s"', $new_version) );
-shell_exec('rm -rf .buildsvn');
+shell_exec('rm -rf .buildsvn --');
 echo 'done with svn' . PHP_EOL;
 
 
